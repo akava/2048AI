@@ -40,7 +40,7 @@ namespace AI2048
                     throw new ArgumentOutOfRangeException("move");
             }
 
-            waitSeconds(.03);
+            waitSeconds(.02);
         }
 
         private void waitSeconds(double seconds)
@@ -94,6 +94,11 @@ namespace AI2048
                 }
                 return new Grid(grid);
             }
+        }
+
+        public bool CanMove 
+        {
+            get { return _driver.FindElementByClassName("game-message").Displayed == false; }
         }
 
         public void Dispose()

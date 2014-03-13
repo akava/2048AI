@@ -61,5 +61,27 @@ namespace AI2048.Game
             }
             return res;
         }
+
+        public int SummAll()
+        {
+            var sum = 0;
+            for (var x = 0; x < _grid.GetLength(0); x++)
+                for (var y = 0; y < _grid.GetLength(0); y++)
+                    sum+=_grid[x, y];
+            return sum;
+        }
+
+        public int EmptyCellsNo
+        {
+            get
+            {
+                var n = 0;
+                for (var x = 0; x < _grid.GetLength(0); x++)
+                    for (var y = 0; y < _grid.GetLength(0); y++)
+                        if(_grid[x, y] == 0)
+                        n++;
+                return n;
+            }
+        }
     }
 }

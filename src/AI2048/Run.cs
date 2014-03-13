@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using AI2048.Game;
 using NUnit.Framework;
@@ -8,6 +10,8 @@ namespace AI2048
     [TestFixture]
     public class Run
     {
+        private Move[] MOVES = { Move.Up, Move.Left, Move.Down, Move.Right };
+
         [Test]
         public void RunSimulation()
         {
@@ -85,6 +89,38 @@ namespace AI2048
                 }
 
             }  
+        }
+
+        [Test]
+        public void OneTurnAheadAI()
+        {
+            using (var game = new GamePage())
+            {
+                while (game.CanMove)
+                {
+                    var move = makeDecision(game.GridState);
+                    game.Turn(move);
+                }
+            }
+        }
+
+        private Move makeDecision(Grid state)
+        {
+            var simulationResults = new Dictionary<Move, int>();
+
+            foreach (var move in MOVES)
+            {
+                var newState = GameLogic.MakeMove(state, move);
+                var res = 0;
+                if (newState.ToString() != state.ToString()) // don't make unnecesary moves
+                    res = newState.EmptyCellsNo;
+                simulationResults.Add(move, res);
+            }
+            
+            var decision = simulationResults.OrderByDescending(p => p.Value).First();
+            Console.WriteLine(String.Join(" ", simulationResults.Select(p=>p.Value.ToString()).ToArray()) + ">" + decision.Value);
+
+            return decision.Key;
         }
     }
 }
