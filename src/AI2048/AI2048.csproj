@@ -49,7 +49,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Tests\GameLogicTests.cs" />
     <Compile Include="GamePage.cs" />
+    <Compile Include="Game\GameLogic.cs" />
+    <Compile Include="Game\Grid.cs" />
     <Compile Include="Move.cs" />
     <Compile Include="Run.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

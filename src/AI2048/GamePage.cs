@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using AI2048.Game;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Support.UI;
@@ -39,6 +40,17 @@ namespace AI2048
                     throw new ArgumentOutOfRangeException("move");
             }
 
+            waitSeconds(.03);
+        }
+
+        private void waitSeconds(double seconds)
+        {
+            try
+            {
+                var wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(seconds));
+                wait.Until(d => d.FindElement(By.ClassName("no-such-name")));
+            }
+            catch (WebDriverTimeoutException) {}
         }
 
         public string Score { get { return _driver.FindElement(By.ClassName("score-container")).Text.Split('\n')[0]; } }
@@ -46,7 +58,7 @@ namespace AI2048
         /// <summary>
         /// numeration starts from Upper Left corner
         /// </summary>
-        public int[,] GridState
+        public Grid GridState
         {
             // tile format is: <div class="tile tile-32 tile-position-2-1 tile-merged">32</div>
             get
@@ -57,12 +69,30 @@ namespace AI2048
                 foreach (var tl in tiles)
                 {
                     var positionStr = tl.GetAttribute("class").Split(' ').First(c => c.StartsWith("tile-position-")).Replace("tile-position-", "");
-
                     var x = int.Parse(positionStr[0].ToString())-1;
                     var y = int.Parse(positionStr[2].ToString())-1;
                     grid[x, y] = int.Parse(tl.Text);
                 }
-                return grid;
+                return new Grid(grid);
+            }
+        }
+
+        public Grid GridStateNoNew
+        {
+            // tile format is: <div class="tile tile-32 tile-position-2-1 tile-merged">32</div>
+            get
+            {
+                var grid = new int[4, 4];
+
+                var tiles = _driver.FindElementsByClassName("tile").Where(t => !t.GetAttribute("class").Contains("tile-new"));
+                foreach (var tl in tiles)
+                {
+                    var positionStr = tl.GetAttribute("class").Split(' ').First(c => c.StartsWith("tile-position-")).Replace("tile-position-", "");
+                    var x = int.Parse(positionStr[0].ToString()) - 1;
+                    var y = int.Parse(positionStr[2].ToString()) - 1;
+                    grid[x, y] = int.Parse(tl.Text);
+                }
+                return new Grid(grid);
             }
         }
 
