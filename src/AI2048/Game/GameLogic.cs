@@ -1,23 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using NUnit.Framework;
 
 namespace AI2048.Game
 {
-
-//0 0 0 0 
-//2 0 0 0 
-//8 8 0 2 
-//2 4 4 0 
-//
-//Right
-//0 0 0 2 
-//0 0 0 2 
-//0 0 16 2 
-//0 0 2 8 
-
     public class GameLogic
     {
         public static Grid MakeMove(Grid grid, Move move)

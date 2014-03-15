@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -42,6 +43,22 @@ namespace AI2048.Game
             return sb.ToString();
         }
 
+        public static bool operator ==(Grid first, Grid second)
+        {
+            if (ReferenceEquals(null, first)) return false;
+            if (ReferenceEquals(null, second)) return false;
+
+            return first.ToString() == second.ToString(); // yeh, this is not the slowest operation here))
+        }
+
+        public static bool operator !=(Grid first, Grid second)
+        {
+            if (ReferenceEquals(null, first)) return false;
+            if (ReferenceEquals(null, second)) return false;
+
+            return !(first == second);
+        }
+
         public int[] GetRow(int y)
         {
             var res = new int[4];
@@ -82,6 +99,15 @@ namespace AI2048.Game
                         n++;
                 return n;
             }
+        }
+
+        public int[] Flatten()
+        {
+            var res = new List<int>();
+            for (var x = 0; x < _grid.GetLength(0); x++)
+                for (var y = 0; y < _grid.GetLength(0); y++)
+                    res.Add(_grid[x, y]);
+            return res.ToArray();
         }
     }
 }
