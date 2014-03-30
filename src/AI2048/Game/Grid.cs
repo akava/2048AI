@@ -28,6 +28,19 @@ namespace AI2048.Game
             _grid = grid;
         }
 
+        public int this[int x, int y]
+        {
+            get
+            {
+                return _grid[x, y];
+            }
+        }
+
+        public int[,] CloneMatrix()
+        {
+            return (int[,])_grid.Clone();
+        }
+
         public override string ToString()
         {
             var sb = new StringBuilder();

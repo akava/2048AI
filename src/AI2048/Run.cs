@@ -15,8 +15,9 @@ namespace AI2048
         [Test]
         public void RunSimulation()
         {
-            var agent = new TwoTurnsAheadAgent(Heuristic.MakeSplitsWithStickyBigNum);
+            var agent = new OptiminiOptimaxAgent(Heuristic.AllRotatiions(Heuristic.CornerVave));
 
+            for (int i = 0; i < 10; i++)
             using (var game = new GamePage())
             {
                 while (game.CanMove)
@@ -25,7 +26,8 @@ namespace AI2048
                     game.Turn(move);
                 }
 
-                game.TakeScreenshot().SaveAsFile("game_" + game.Score, ImageFormat.Png);
+                game.TakeScreenshot().SaveAsFile("game_" + game.Score + ".png", ImageFormat.Png);
+                Console.WriteLine(game.Score);
             }
         }
     }

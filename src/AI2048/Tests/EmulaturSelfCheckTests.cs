@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using AI2048.Game;
 using NUnit.Framework;
 
@@ -53,7 +54,7 @@ namespace AI2048.Tests
         }
 
         [Test]
-        public void RunGameLogicSelfCheck()
+        public void RunGameLogic_AgentTurnSelfCheck()
         {
             using (var game = new GamePage())
             {
@@ -79,6 +80,41 @@ namespace AI2048.Tests
                         Console.WriteLine("Failed selfcheck");
                         Console.WriteLine(prevState);
                         Console.WriteLine(move);
+                        Console.WriteLine(actual);
+                    }
+                }
+
+            }
+        }
+
+        [Test]
+        public void RunGameLogic_WorldTurnSelfCheck()
+        {
+            using (var game = new GamePage())
+            {
+                var moves = new[]{
+                    Move.Up, Move.Left, Move.Down, Move.Right,
+                    Move.Up, Move.Left, Move.Down, Move.Right,
+                    Move.Up, Move.Left, Move.Down, Move.Right,
+                    Move.Up, Move.Left, Move.Down, Move.Right,
+                    Move.Up, Move.Left, Move.Down, Move.Right,
+                    Move.Up, Move.Left, Move.Down, Move.Right,
+                };
+
+                foreach (var move in moves)
+                {
+                    game.Turn(move);
+                    if (game.NewEl == 4)
+                        continue;
+
+                    var state = game.GridStateNoNew;
+                    var possibleStates = GameLogic.NextPossibleWorldStates(state);
+
+                    var actual = game.GridState;
+                    if (possibleStates.All(s => s.ToString() != actual.ToString()))
+                    {
+                        Console.WriteLine("Failed selfcheck");
+                        Console.WriteLine(game.GridStateNoNew);
                         Console.WriteLine(actual);
                     }
                 }

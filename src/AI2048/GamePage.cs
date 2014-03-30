@@ -53,7 +53,7 @@ namespace AI2048
             // tile format is: <div class="tile tile-32 tile-position-2-1 tile-merged">32</div>
             get
             {
-                try
+                return retryOnSeleniumException(() =>
                 {
                     var grid = new int[4, 4];
 
@@ -66,12 +66,7 @@ namespace AI2048
                         grid[x, y] = int.Parse(tl.Text);
                     }
                     return new Grid(grid);
-                }
-                catch (FormatException) // the world is not yet ready, trying again
-                {
-                    Thread.Sleep(100);
-                    return GridState;
-                }
+                });
             }
         }
 
@@ -80,7 +75,7 @@ namespace AI2048
             // tile format is: <div class="tile tile-32 tile-position-2-1 tile-merged">32</div>
             get
             {
-                try
+                return retryOnSeleniumException(() =>
                 {
                     var grid = new int[4, 4];
 
@@ -93,12 +88,37 @@ namespace AI2048
                         grid[x, y] = int.Parse(tl.Text);
                     }
                     return new Grid(grid);
-                }
-                catch (FormatException) // the world is not yet ready, trying again
+                });
+            }
+        }
+
+        public int NewEl
+        {
+            get
+            {
+                return retryOnSeleniumException(() =>
                 {
-                    Thread.Sleep(100);
-                    return GridState;
-                }
+                    var newTile = _driver.FindElementsByClassName("tile").First(t => t.GetAttribute("class").Contains("tile-new"));
+                    return int.Parse(newTile.Text);
+                });
+            }
+        }
+
+        private T retryOnSeleniumException<T>(Func<T> func, int retry = 1)
+        {
+            try
+            {
+                return func();
+            }
+            catch (StaleElementReferenceException)
+            {
+                Thread.Sleep(retry * 200);
+                return retryOnSeleniumException(func, retry+1);
+            }
+            catch (FormatException) // the world is not yet ready, trying again
+            {
+                Thread.Sleep(retry * 200);
+                return retryOnSeleniumException(func, retry + 1);
             }
         }
 

@@ -21,7 +21,7 @@ namespace AI2048.AI
             }
 
             var decision = simulationResults.OrderByDescending(p => p.Value).First();
-            //Console.WriteLine(String.Join(" ", simulationResults.Select(p=>p.Value.ToString()).ToArray()) + ">" + decision.Value);
+            Console.WriteLine(String.Join(" ", simulationResults.Select(p=>p.Value.ToString()).ToArray()) + ">" + decision.Value);
 
             return decision.Key;
         }
@@ -34,7 +34,7 @@ namespace AI2048.AI
                 var newState = GameLogic.MakeMove(state, move);
                 if (newState == state)
                     continue; // don't make unnecessary moves
-                simulationResults.Add(move, heuristic(newState));
+                simulationResults.Add(move, _heuristic(newState));
             }
 
             var decision = simulationResults.OrderByDescending(p => p.Value).First();

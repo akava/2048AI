@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="AI\Agent.cs" />
     <Compile Include="AI\Heuristic.cs" />
+    <Compile Include="AI\OptiminiOptimaxAgent.cs" />
     <Compile Include="AI\TwoTurnsAheadAgent.cs" />
     <Compile Include="Game\Move.cs" />
     <Compile Include="Tests\EmulaturSelfCheckTests.cs" />
@@ -60,6 +61,7 @@
     <Compile Include="Game\Grid.cs" />
     <Compile Include="Run.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tests\GridOperationsTests.cs" />
     <Compile Include="WebDriverExtensions.cs" />
   </ItemGroup>
   <ItemGroup>

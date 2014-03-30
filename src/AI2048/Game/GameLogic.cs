@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace AI2048.Game
 {
@@ -94,6 +96,37 @@ namespace AI2048.Game
             }
 
             return line;
+        }
+
+        /// <summary>
+        /// Rotates the grid clockwise
+        /// </summary>
+        public static Grid RotateCW(Grid grid)
+        {
+            var newGrid = new int[4, 4];
+            for (var x = 0; x < 4; x++)
+                for (var y = 0; y < 4; y++)
+                {
+                    newGrid[3 - y, x] = grid[x, y];
+                }
+
+            return new Grid(newGrid);
+        }
+
+        public static List<Grid> NextPossibleWorldStates(Grid state)
+        {
+            var nextStates = new List<Grid>();
+            for (var x = 0; x < 4; x++)
+                for (var y = 0; y < 4; y++)
+                    if (state[x, y] == 0)
+                    {
+                        var newState = state.CloneMatrix();
+                        newState[x, y] = 2;
+
+                        nextStates.Add(new Grid(newState));
+                    }
+
+            return nextStates;
         }
     }
 }
